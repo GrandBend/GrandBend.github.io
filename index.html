@@ -26,33 +26,45 @@
     <h1>Vacation Countdown</h1>
     <div id="difference">Calculating...</div>
 
-    <script>
-        function updateDifference() {
-            const differenceElement = document.getElementById("difference");
-            const startTimestamp = 1692225000; // Starting Epoch timestamp
-            const endTimestamp = 1693139400; // Ending Epoch timestamp
-            const currentTimestamp = Math.floor(Date.now() / 1000); // Convert to seconds (current Epoch timestamp)
+    <audio id="countdownAudio" src="https://cdn.discordapp.com/attachments/1120123507951534104/1138898552353996861/y2mate.is_-_Europe_The_Final_Countdown_audio_-lZzcQ-uQ8R0-128k-1691604945.mp3" preload="auto"></audio>
 
-            if (currentTimestamp >= endTimestamp) {
-                differenceElement.textContent = 'Vacation Ended :(';
-            } else if (currentTimestamp >= startTimestamp) {
-                differenceElement.textContent = "Vacation Started! :D";
+<script>
+    function updateDifference() {
+        const differenceElement = document.getElementById("difference");
+        const startTimestamp = 1692225000; // Starting Epoch timestamp
+        const endTimestamp = 1693139400; // Ending Epoch timestamp
+        const currentTimestamp = Math.floor(Date.now() / 1000); // Convert to seconds (current Epoch timestamp)
+
+        if (currentTimestamp >= endTimestamp) {
+            differenceElement.textContent = 'Vacation Ended :(';
+        } else if (currentTimestamp >= startTimestamp) {
+            differenceElement.textContent = "Vacation Started! :D";
+        } else {
+            const differenceInSeconds = startTimestamp - currentTimestamp;
+            const days = Math.floor(differenceInSeconds / (60 * 60 * 24));
+            const hours = Math.floor((differenceInSeconds % (60 * 60 * 24)) / (60 * 60));
+            const minutes = Math.floor((differenceInSeconds % (60 * 60)) / 60);
+            const seconds = differenceInSeconds % 60;
+
+            const formattedDifference = `${days} Days, ${hours} Hours, ${minutes} Minutes, ${seconds} Seconds`;
+            differenceElement.textContent = formattedDifference;
+
+            if (days <= 7) {
+                differenceElement.style.color = "red";
+                const countdownAudio = document.getElementById("countdownAudio");
+                countdownAudio.play();
             } else {
-                const differenceInSeconds = startTimestamp - currentTimestamp;
-                const days = Math.floor(differenceInSeconds / (60 * 60 * 24));
-                const hours = Math.floor((differenceInSeconds % (60 * 60 * 24)) / (60 * 60));
-                const minutes = Math.floor((differenceInSeconds % (60 * 60)) / 60);
-                const seconds = differenceInSeconds % 60;
-
-                const formattedDifference = `${days} Days, ${hours} Hours, ${minutes} Minutes, ${seconds} Seconds`;
-                differenceElement.textContent = formattedDifference;
-                differenceElement.style.animation = "spin 0.3s"; // Apply the animation on each update
+                differenceElement.style.color = ""; // Reset color to default
             }
-        }
 
-        // Update the difference initially and every second
-        updateDifference();
-        setInterval(updateDifference, 1000);
-    </script>
+            differenceElement.style.animation = "spin 0.3s"; // Apply the animation on each update
+        }
+    }
+
+    // Update the difference initially and every second
+    updateDifference();
+    setInterval(updateDifference, 1000);
+</script>
+
 </body>
 </html>
